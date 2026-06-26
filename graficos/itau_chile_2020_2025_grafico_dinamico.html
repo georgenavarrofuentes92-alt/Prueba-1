@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Banco Itaú Chile - gráfico dinámico 2020-2025</title>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 32px;
+      line-height: 1.45;
+      background: #ffffff;
+      color: #1f2328;
+    }
+    .container {
+      max-width: 1100px;
+      margin: auto;
+    }
+    h1 {
+      margin-bottom: 4px;
+    }
+    .note {
+      color: #57606a;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+    #chart {
+      width: 100%;
+      height: 620px;
+    }
+    .footer {
+      color: #57606a;
+      font-size: 13px;
+      margin-top: 18px;
+      border-top: 1px solid #d8dee4;
+      padding-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Banco Itaú Chile: indicadores financieros 2020-2025</h1>
+    <div class="note">
+      Gráfico interactivo con selector de indicador. Cifras financieras en MM$ y ratios en porcentaje.
+    </div>
+    <div id="chart"></div>
+    <div class="footer">
+      Elaboración propia a partir de la base financiera histórica construida para el estudio. 
+      Este material tiene fines educativos y no constituye recomendación de inversión.
+    </div>
+  </div>
+
+  <script>
+    const rows = [{"anio": 2020, "activos": 35638632, "creditos": 21685269, "utilidad": -925479, "roa": null, "roe": null, "eficiencia": null, "patrimonio_activos": 6.7}, {"anio": 2021, "activos": 37784282, "creditos": 23955972, "utilidad": 277806, "roa": 0.76, "roe": 9.93, "eficiencia": 53.9, "patrimonio_activos": 8.87}, {"anio": 2022, "activos": 40504299, "creditos": 25903788, "utilidad": 433744, "roa": 1.11, "roe": 13.15, "eficiencia": 52.1, "patrimonio_activos": 8.2}, {"anio": 2023, "activos": 41970270, "creditos": 26744561, "utilidad": 354887, "roa": 0.86, "roe": 10.06, "eficiencia": 51.08, "patrimonio_activos": 8.9}, {"anio": 2024, "activos": 42531714, "creditos": 27055397, "utilidad": 376627, "roa": 0.89, "roe": 9.78, "eficiencia": 49.75, "patrimonio_activos": 9.35}, {"anio": 2025, "activos": 43916278, "creditos": 28119106, "utilidad": 428092, "roa": 0.99, "roe": 10.34, "eficiencia": 54.99, "patrimonio_activos": 9.81}];
+    const years = rows.map(r => String(r.anio));
+
+    const metrics = {
+      activos: {
+        label: "Total activos",
+        y: rows.map(r => r.activos),
+        unit: "MM$",
+        title: "Total activos",
+        yaxis: "Millones de pesos chilenos",
+        hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
+      },
+      creditos: {
+        label: "Créditos a clientes",
+        y: rows.map(r => r.creditos),
+        unit: "MM$",
+        title: "Créditos a clientes",
+        yaxis: "Millones de pesos chilenos",
+        hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
+      },
+      utilidad: {
+        label: "Utilidad atribuible",
+        y: rows.map(r => r.utilidad),
+        unit: "MM$",
+        title: "Utilidad atribuible a propietarios",
+        yaxis: "Millones de pesos chilenos",
+        hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
+      },
+      roa: {
+        label: "ROA",
+        y: rows.map(r => r.roa),
+        unit: "%",
+        title: "ROA sobre activos promedio",
+        yaxis: "Porcentaje",
+        hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
+      },
+      roe: {
+        label: "ROE",
+        y: rows.map(r => r.roe),
+        unit: "%",
+        title: "ROE sobre patrimonio promedio",
+        yaxis: "Porcentaje",
+        hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
+      },
+      eficiencia: {
+        label: "Eficiencia operacional",
+        y: rows.map(r => r.eficiencia),
+        unit: "%",
+        title: "Eficiencia operacional",
+        yaxis: "Porcentaje",
+        hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
+      },
+      patrimonio_activos: {
+        label: "Patrimonio / activos",
+        y: rows.map(r => r.patrimonio_activos),
+        unit: "%",
+        title: "Patrimonio total sobre activos",
+        yaxis: "Porcentaje",
+        hovertemplate: "Año: %{x}<br>Patrimonio / activos: %{y:.2f}%<extra></extra>"
+      }
+    };
+
+    function traceFor(metricKey) {
+      const m = metrics[metricKey];
+      return {
+        x: years,
+        y: m.y,
+        type: "scatter",
+        mode: "lines+markers",
+        name: m.label,
+        hovertemplate: m.hovertemplate,
+        connectgaps: false
+      };
+    }
+
+    const initialMetric = "activos";
+
+    const layout = {
+      title: {
+        text: metrics[initialMetric].title + " 2020-2025",
+        x: 0.02,
+        xanchor: "left"
+      },
+      xaxis: {
+        title: "Año",
+        type: "category"
+      },
+      yaxis: {
+        title: metrics[initialMetric].yaxis,
+        rangemode: "tozero"
+      },
+      hovermode: "x unified",
+      margin: { l: 80, r: 40, t: 90, b: 70 },
+      updatemenus: [{
+        buttons: Object.keys(metrics).map(key => ({
+          label: metrics[key].label,
+          method: "update",
+          args: [
+            { y: [metrics[key].y], name: metrics[key].label, hovertemplate: metrics[key].hovertemplate },
+            {
+              title: { text: metrics[key].title + " 2020-2025", x: 0.02, xanchor: "left" },
+              yaxis: { title: metrics[key].yaxis, rangemode: "tozero" }
+            }
+          ]
+        })),
+        direction: "down",
+        showactive: true,
+        x: 0,
+        xanchor: "left",
+        y: 1.18,
+        yanchor: "top"
+      }]
+    };
+
+    Plotly.newPlot("chart", [traceFor(initialMetric)], layout, { responsive: true, displaylogo: false });
+  </script>
+</body>
+</html>
