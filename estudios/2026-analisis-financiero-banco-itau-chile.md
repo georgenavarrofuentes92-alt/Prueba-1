@@ -42,7 +42,21 @@ Total pasivos	39.607.525	38.574.853	2,7%
 Patrimonio atribuible a propietarios	4.305.006	3.971.313	8,4%
 Utilidad atribuible a propietarios	428.092	376.627	13,7%
 
-5. Análisis de balance
+5. Análisis histórico 2020-2025
+
+Entre 2020 y 2025, Banco Itaú Chile muestra una recuperación significativa desde la pérdida registrada en 2020 hacia niveles de utilidad positivos y más estables desde 2021 en adelante.
+
+El total de activos pasó desde MM$35.638.632 en 2020 a MM$43.916.278 en 2025. Esto representa un crecimiento acumulado de aproximadamente 23,2% en el periodo.
+
+La cartera de créditos a clientes pasó desde MM$21.685.269 en 2020 a MM$28.119.106 en 2025, equivalente a un crecimiento acumulado aproximado de 29,7%.
+
+La utilidad atribuible a propietarios fue negativa en 2020 por MM$925.479, pero desde 2021 en adelante el banco volvió a resultados positivos. El mayor resultado de la serie se observa en 2022, con MM$433.744, seguido por 2025 con MM$428.092.
+
+En términos de eficiencia operacional, el año 2020 aparece distorsionado por efectos extraordinarios. Desde 2021 en adelante, el indicador se mueve entre 49,8% y 55,0%. El mejor año de eficiencia fue 2024, mientras que en 2025 se observa un deterioro relativo.
+
+Desde una perspectiva patrimonial, el patrimonio total sobre activos aumentó desde 6,7% en 2020 a 9,8% en 2025, lo que muestra una base de capital más robusta al cierre del periodo analizado.
+
+6. Análisis de balance
 
 El total de activos creció 3,2% en 2025, pasando desde MM$42.549.684 a MM$43.916.278. Este crecimiento fue moderado y estuvo acompañado por una expansión de la cartera de créditos a clientes de 3,9%.
 
@@ -50,7 +64,7 @@ Dentro de la cartera, el segmento con mayor crecimiento fue vivienda, con un aum
 
 La estructura de balance muestra un patrimonio atribuible a propietarios de MM$4.305.006, equivalente a aproximadamente 9,8% del total de activos. Esto refleja una base patrimonial relevante para el tamaño del banco.
 
-6. Análisis de resultados
+7. Análisis de resultados
 
 El ingreso neto por intereses aumentó 5,1%, alcanzando MM$1.116.737. Sin embargo, el ingreso neto por reajustes cayó significativamente, desde MM$115.836 en 2024 a MM$9.340 en 2025.
 
@@ -58,7 +72,7 @@ El total de ingresos operacionales disminuyó 6,6%, pasando desde MM$1.625.751 a
 
 Como resultado, el resultado operacional antes de pérdidas crediticias cayó 16,4%. No obstante, la utilidad final atribuible a propietarios aumentó 13,7%, impulsada por un menor gasto neto por pérdidas crediticias y un efecto positivo asociado al impuesto a la renta.
 
-7. Indicadores financieros
+8. Indicadores financieros
 
 Indicador	Fórmula	Resultado 2025
 ROA	Utilidad atribuible / Activos promedio	1,0%
@@ -67,7 +81,7 @@ Eficiencia operacional	Gastos operacionales / Ingresos operacionales	55,0%
 Costo de riesgo	Gasto por pérdidas crediticias / Cartera promedio	1,16%
 Patrimonio / Activos	Patrimonio total / Activos totales	9,8%
 
-8. Análisis bursátil
+9. Análisis bursátil
 
 Para el análisis bursátil se utiliza el precio de cierre de la acción ITAUCL.SN al 30 de diciembre de 2025, equivalente a CLP 19.950 por acción.
 
@@ -90,7 +104,7 @@ P/B ≈ 1,0x
 
 Esto indica que, al cierre de 2025, el mercado valoraba la acción cerca de su valor contable.
 
-9. Fortalezas observadas
+10. Fortalezas observadas
 
 Entre las principales fortalezas observadas se encuentran:
 
@@ -100,7 +114,7 @@ Entre las principales fortalezas observadas se encuentran:
 4. Ratio P/B cercano a 1,0x, lo que permite una lectura directa entre precio bursátil y valor libro.
 5. Patrimonio equivalente a aproximadamente 9,8% de activos.
 
-10. Riesgos y puntos de atención
+11. Riesgos y puntos de atención
 
 Los principales puntos de atención son:
 
@@ -110,7 +124,7 @@ Los principales puntos de atención son:
 4. Resultado operacional antes de pérdidas crediticias con caída de 16,4%.
 5. Dependencia del resultado final respecto de efectos no necesariamente recurrentes, como el impuesto a la renta.
 
-11. Conclusión
+12. Conclusión
 
 Banco Itaú Chile cerró 2025 con una mejora relevante en utilidad final y expansión moderada de cartera. Sin embargo, el análisis operacional muestra señales mixtas: los ingresos operacionales disminuyeron, los gastos crecieron y la eficiencia se deterioró.
 
