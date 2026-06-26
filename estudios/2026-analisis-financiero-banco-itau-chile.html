@@ -202,43 +202,43 @@
   <div class="section-head">
     <h2>Visualización dinámica del análisis</h2>
   </div>
+
   <div class="section-body">
     <p>
       El siguiente gráfico permite revisar de forma interactiva la evolución de
       los principales indicadores financieros de Banco Itaú Chile entre 2020 y 2025.
-      El selector permite cambiar entre activos, créditos, utilidad, ROA, ROE,
-      eficiencia operacional y patrimonio sobre activos.
     </p>
 
     <div class="dynamic-chart-panel liquid-glass-panel">
-  <div class="chart-toolbar">
-    <div class="chart-toolbar-left">
-      <label for="metric-select" class="chart-label">Indicador</label>
-      <select id="metric-select" class="glass-select">
-        <option value="activos">Total activos</option>
-        <option value="creditos" selected>Créditos a clientes</option>
-        <option value="utilidad">Utilidad atribuible</option>
-        <option value="roa">ROA</option>
-        <option value="roe">ROE</option>
-        <option value="eficiencia">Eficiencia operacional</option>
-        <option value="patrimonio_activos">Patrimonio / activos</option>
-      </select>
+      <div class="chart-toolbar">
+        <div class="chart-toolbar-left">
+          <label for="metric-select" class="chart-label">Indicador</label>
+          <select id="metric-select" class="glass-select">
+            <option value="activos">Total activos</option>
+            <option value="creditos" selected>Créditos a clientes</option>
+            <option value="utilidad">Utilidad atribuible</option>
+            <option value="roa">ROA</option>
+            <option value="roe">ROE</option>
+            <option value="eficiencia">Eficiencia operacional</option>
+            <option value="patrimonio_activos">Patrimonio / activos</option>
+          </select>
+        </div>
+
+        <div class="chart-toolbar-right">
+          <span id="chart-title-pill" class="chart-pill">Créditos a clientes</span>
+        </div>
+      </div>
+
+      <div id="itau-dynamic-chart"></div>
     </div>
 
-    <div class="chart-toolbar-right">
-      <span id="chart-title-pill" class="chart-pill">Créditos a clientes</span>
-    </div>
-  </div>
-
-  <div id="itau-dynamic-chart"></div>
-</div>
-    
     <p class="chart-note">
       Cifras financieras expresadas en MM$ y ratios en porcentaje. Elaboración propia
       a partir de la base financiera histórica construida para el estudio.
     </p>
   </div>
 </section>
+
 <section class="report-section">
   <div class="section-head">
     <h2>Gráficos complementarios</h2>
@@ -287,8 +287,8 @@
       </article>
     </div>
   </div>
-</section>      </div>
-      <div class="section-body image-grid">
+</section>
+<!--      <div class="section-body image-grid">
         <figure class="chart-card">
           <img src="../graficos/itau_activos_creditos_2020_2025.png" alt="Evolución de activos y créditos">
           <figcaption>Evolución de activos y créditos</figcaption>
@@ -306,6 +306,7 @@
           <figcaption>Eficiencia operacional</figcaption>
         </figure>
       </div>
+  -->
   <!--/*    <div class="section-actions">
         <a class="report-button" href="../graficos/itau_chile_2020_2025_grafico_dinamico.html">
           Ver gráfico dinámico
@@ -336,7 +337,7 @@
     </footer>
 
   </main>
- <script>
+<script>
   const itauRows = [
     { anio: 2020, activos: 35638632, creditos: 21685269, utilidad: -925479, roa: null, roe: null, eficiencia: null, patrimonio_activos: 6.70 },
     { anio: 2021, activos: 37784282, creditos: 23955972, utilidad: 277806, roa: 0.76, roe: 9.93, eficiencia: 53.90, patrimonio_activos: 8.87 },
@@ -465,7 +466,6 @@
 
   function buildMainTrace(metricKey) {
     const metric = metrics[metricKey];
-
     return {
       x: years,
       y: metric.y,
@@ -492,7 +492,6 @@
 
   function renderMainChart(metricKey) {
     const metric = metrics[metricKey];
-
     Plotly.newPlot(
       "itau-dynamic-chart",
       [buildMainTrace(metricKey)],
@@ -501,126 +500,117 @@
     );
 
     const pill = document.getElementById("chart-title-pill");
-    if (pill) {
-      pill.textContent = metric.label;
-    }
+    if (pill) pill.textContent = metric.label;
   }
 
   function renderComplementaryCharts() {
-    if (document.getElementById("chart-activos-creditos")) {
-      Plotly.newPlot(
-        "chart-activos-creditos",
-        [
-          {
-            x: years,
-            y: itauRows.map(row => row.activos),
-            type: "scatter",
-            mode: "lines+markers",
-            name: "Total activos",
-            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.4 },
-            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#e8eef8" } },
-            hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
+    Plotly.newPlot(
+      "chart-activos-creditos",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.activos),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Total activos",
+          line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.4 },
+          marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#e8eef8" } },
+          hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
+        },
+        {
+          x: years,
+          y: itauRows.map(row => row.creditos),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Créditos a clientes",
+          line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.4 },
+          marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
+          hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
+        }
+      ],
+      baseLayout("Activos y créditos 2020-2025", "MM$", 16),
+      commonConfig
+    );
+
+    Plotly.newPlot(
+      "chart-utilidad",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.utilidad),
+          type: "bar",
+          name: "Utilidad atribuible",
+          marker: {
+            color: itauRows.map(row => row.utilidad < 0 ? "rgba(239,68,68,0.78)" : "rgba(34,211,238,0.78)"),
+            line: { color: "rgba(255,255,255,0.20)", width: 1 }
           },
-          {
-            x: years,
-            y: itauRows.map(row => row.creditos),
-            type: "scatter",
-            mode: "lines+markers",
-            name: "Créditos a clientes",
-            line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.4 },
-            marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
-            hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
-          }
-        ],
-        baseLayout("Activos y créditos 2020-2025", "MM$", 16),
-        commonConfig
-      );
-    }
+          hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
+        }
+      ],
+      baseLayout("Utilidad atribuible 2020-2025", "MM$", 16),
+      commonConfig
+    );
 
-    if (document.getElementById("chart-utilidad")) {
-      Plotly.newPlot(
-        "chart-utilidad",
-        [
-          {
-            x: years,
-            y: itauRows.map(row => row.utilidad),
-            type: "bar",
-            name: "Utilidad atribuible",
-            marker: {
-              color: itauRows.map(row => row.utilidad < 0 ? "rgba(239,68,68,0.78)" : "rgba(34,211,238,0.78)"),
-              line: { color: "rgba(255,255,255,0.20)", width: 1 }
-            },
-            hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
-          }
-        ],
-        baseLayout("Utilidad atribuible 2020-2025", "MM$", 16),
-        commonConfig
-      );
-    }
+    Plotly.newPlot(
+      "chart-roa-roe",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.roa),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "ROA",
+          line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
+          marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
+          hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
+        },
+        {
+          x: years,
+          y: itauRows.map(row => row.roe),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "ROE",
+          line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.35 },
+          marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
+          hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
+        }
+      ],
+      baseLayout("ROA y ROE 2020-2025", "%", 16),
+      commonConfig
+    );
 
-    if (document.getElementById("chart-roa-roe")) {
-      Plotly.newPlot(
-        "chart-roa-roe",
-        [
-          {
-            x: years,
-            y: itauRows.map(row => row.roa),
-            type: "scatter",
-            mode: "lines+markers",
-            name: "ROA",
-            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
-            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
-            hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
-          },
-          {
-            x: years,
-            y: itauRows.map(row => row.roe),
-            type: "scatter",
-            mode: "lines+markers",
-            name: "ROE",
-            line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.35 },
-            marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
-            hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
-          }
-        ],
-        baseLayout("ROA y ROE 2020-2025", "%", 16),
-        commonConfig
-      );
-    }
-
-    if (document.getElementById("chart-eficiencia")) {
-      Plotly.newPlot(
-        "chart-eficiencia",
-        [
-          {
-            x: years,
-            y: itauRows.map(row => row.eficiencia),
-            type: "scatter",
-            mode: "lines+markers",
-            name: "Eficiencia operacional",
-            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
-            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
-            fill: "tozeroy",
-            fillcolor: "rgba(34, 211, 238, 0.10)",
-            hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
-          }
-        ],
-        baseLayout("Eficiencia operacional 2020-2025", "%", 16),
-        commonConfig
-      );
-    }
+    Plotly.newPlot(
+      "chart-eficiencia",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.eficiencia),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Eficiencia operacional",
+          line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
+          marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
+          fill: "tozeroy",
+          fillcolor: "rgba(34, 211, 238, 0.10)",
+          hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
+        }
+      ],
+      baseLayout("Eficiencia operacional 2020-2025", "%", 16),
+      commonConfig
+    );
   }
 
   const select = document.getElementById("metric-select");
-
   if (select) {
     select.addEventListener("change", function () {
       renderMainChart(this.value);
     });
   }
 
-  renderMainChart("creditos");
-  renderComplementaryCharts();
-</script>
+  document.addEventListener("DOMContentLoaded", function () {
+    renderMainChart("creditos");
+    renderComplementaryCharts();
+  });
+</script> 
 </body>
 </html>
