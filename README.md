@@ -1,4 +1,5 @@
-Prueba-1
+- [Análisis financiero de Banco Itaú Chile 2025](estudios/2026-analisis-financiero-banco-itau-chile.md)
+- Prueba-1
 
 Repositorio de práctica para aprender GitHub y documentar estudios, ensayos y análisis profesionales.
 
