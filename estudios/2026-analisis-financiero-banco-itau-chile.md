@@ -80,6 +80,15 @@ A continuación se presentan gráficos construidos a partir de la base financier
 
 ![Patrimonio sobre activos](../graficos/itau_patrimonio_sobre_activos_2020_2025.png)
 
+
+## Gráfico dinámico 2020-2025
+
+Para complementar el análisis histórico, se incorporó un gráfico dinámico con selector de indicador. El archivo permite revisar la evolución de activos, créditos, utilidad atribuible, ROA, ROE, eficiencia operacional y patrimonio sobre activos.
+
+[Ver gráfico dinámico](../graficos/itau_chile_2020_2025_grafico_dinamico.html)
+
+> Nota: si el archivo se visualiza desde GitHub Pages, el gráfico se verá interactivo en el navegador. En la vista normal del repositorio de GitHub puede mostrarse como código HTML.
+
 6. Análisis de balance
 
 El total de activos creció 3,2% en 2025, pasando desde MM$42.549.684 a MM$43.916.278. Este crecimiento fue moderado y estuvo acompañado por una expansión de la cartera de créditos a clientes de 3,9%.
