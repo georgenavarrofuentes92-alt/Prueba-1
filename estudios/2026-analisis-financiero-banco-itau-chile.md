@@ -56,6 +56,30 @@ En términos de eficiencia operacional, el año 2020 aparece distorsionado por e
 
 Desde una perspectiva patrimonial, el patrimonio total sobre activos aumentó desde 6,7% en 2020 a 9,8% en 2025, lo que muestra una base de capital más robusta al cierre del periodo analizado.
 
+## Visualización de indicadores 2020-2025
+
+A continuación se presentan gráficos construidos a partir de la base financiera histórica 2020-2025.
+
+### Evolución de activos y créditos
+
+![Evolución de activos y créditos](../graficos/itau_activos_creditos_2020_2025.png)
+
+### Utilidad atribuible a propietarios
+
+![Utilidad atribuible a propietarios](../graficos/itau_utilidad_atribuible_2020_2025.png)
+
+### ROA y ROE
+
+![ROA y ROE](../graficos/itau_roa_roe_2021_2025.png)
+
+### Eficiencia operacional
+
+![Eficiencia operacional](../graficos/itau_eficiencia_operacional_2021_2025.png)
+
+### Patrimonio sobre activos
+
+![Patrimonio sobre activos](../graficos/itau_patrimonio_sobre_activos_2020_2025.png)
+
 6. Análisis de balance
 
 El total de activos creció 3,2% en 2025, pasando desde MM$42.549.684 a MM$43.916.278. Este crecimiento fue moderado y estuvo acompañado por una expansión de la cartera de créditos a clientes de 3,9%.
