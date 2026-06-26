@@ -400,18 +400,13 @@
     }
   };
 
-  function axisConfig(unit) {
-    if (unit === "%") {
-      return {
-        title: unit,
-        rangemode: "tozero",
-        gridcolor: "rgba(255,255,255,0.08)",
-        zerolinecolor: "rgba(255,255,255,0.10)",
-        tickfont: { color: "#cbd5e1" },
-        titlefont: { color: "#cbd5e1" }
-      };
-    }
+  const commonConfig = {
+    responsive: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: ["select2d", "lasso2d", "autoScale2d"]
+  };
 
+  function baseAxis(unit) {
     return {
       title: unit,
       rangemode: "tozero",
@@ -422,7 +417,53 @@
     };
   }
 
-  function buildTrace(metricKey) {
+  function baseLayout(title, yTitle, titleSize = 20) {
+    return {
+      title: {
+        text: title,
+        font: { color: "#f8fafc", size: titleSize },
+        x: 0.02,
+        xanchor: "left"
+      },
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(5, 15, 30, 0.32)",
+      font: {
+        color: "#cbd5e1",
+        family: "Arial, Helvetica, sans-serif"
+      },
+      margin: {
+        l: 70,
+        r: 30,
+        t: 70,
+        b: 55
+      },
+      xaxis: {
+        title: "Año",
+        type: "category",
+        gridcolor: "rgba(255,255,255,0.08)",
+        zerolinecolor: "rgba(255,255,255,0.10)",
+        tickfont: { color: "#cbd5e1" },
+        titlefont: { color: "#cbd5e1" }
+      },
+      yaxis: baseAxis(yTitle),
+      hovermode: "x unified",
+      hoverlabel: {
+        bgcolor: "rgba(15, 23, 42, 0.92)",
+        bordercolor: "rgba(34, 211, 238, 0.35)",
+        font: { color: "#f8fafc" }
+      },
+      legend: {
+        orientation: "h",
+        yanchor: "bottom",
+        y: 1.02,
+        xanchor: "left",
+        x: 0,
+        font: { color: "#cbd5e1", size: 11 }
+      }
+    };
+  }
+
+  function buildMainTrace(metricKey) {
     const metric = metrics[metricKey];
 
     return {
@@ -440,10 +481,7 @@
       marker: {
         size: 9,
         color: "#60a5fa",
-        line: {
-          width: 1.5,
-          color: "#e8eef8"
-        }
+        line: { width: 1.5, color: "#e8eef8" }
       },
       fill: "tozeroy",
       fillcolor: "rgba(34, 211, 238, 0.10)",
@@ -452,65 +490,14 @@
     };
   }
 
-  function renderChart(metricKey) {
+  function renderMainChart(metricKey) {
     const metric = metrics[metricKey];
-
-    const layout = {
-      title: {
-        text: metric.title,
-        font: {
-          color: "#f8fafc",
-          size: 21
-        },
-        x: 0.02,
-        xanchor: "left"
-      },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(5, 15, 30, 0.32)",
-      font: {
-        color: "#cbd5e1",
-        family: "Arial, Helvetica, sans-serif"
-      },
-      margin: {
-        l: 72,
-        r: 32,
-        t: 70,
-        b: 60
-      },
-      xaxis: {
-        title: "Año",
-        type: "category",
-        gridcolor: "rgba(255,255,255,0.08)",
-        zerolinecolor: "rgba(255,255,255,0.10)",
-        tickfont: { color: "#cbd5e1" },
-        titlefont: { color: "#cbd5e1" }
-      },
-      yaxis: axisConfig(metric.yaxis),
-      hovermode: "x unified",
-      hoverlabel: {
-        bgcolor: "rgba(15, 23, 42, 0.92)",
-        bordercolor: "rgba(34, 211, 238, 0.35)",
-        font: {
-          color: "#f8fafc"
-        }
-      }
-    };
-
-    const config = {
-      responsive: true,
-      displaylogo: false,
-      modeBarButtonsToRemove: [
-        "select2d",
-        "lasso2d",
-        "autoScale2d"
-      ]
-    };
 
     Plotly.newPlot(
       "itau-dynamic-chart",
-      [buildTrace(metricKey)],
-      layout,
-      config
+      [buildMainTrace(metricKey)],
+      baseLayout(metric.title, metric.yaxis, 21),
+      commonConfig
     );
 
     const pill = document.getElementById("chart-title-pill");
@@ -519,247 +506,121 @@
     }
   }
 
+  function renderComplementaryCharts() {
+    if (document.getElementById("chart-activos-creditos")) {
+      Plotly.newPlot(
+        "chart-activos-creditos",
+        [
+          {
+            x: years,
+            y: itauRows.map(row => row.activos),
+            type: "scatter",
+            mode: "lines+markers",
+            name: "Total activos",
+            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.4 },
+            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#e8eef8" } },
+            hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
+          },
+          {
+            x: years,
+            y: itauRows.map(row => row.creditos),
+            type: "scatter",
+            mode: "lines+markers",
+            name: "Créditos a clientes",
+            line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.4 },
+            marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
+            hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
+          }
+        ],
+        baseLayout("Activos y créditos 2020-2025", "MM$", 16),
+        commonConfig
+      );
+    }
+
+    if (document.getElementById("chart-utilidad")) {
+      Plotly.newPlot(
+        "chart-utilidad",
+        [
+          {
+            x: years,
+            y: itauRows.map(row => row.utilidad),
+            type: "bar",
+            name: "Utilidad atribuible",
+            marker: {
+              color: itauRows.map(row => row.utilidad < 0 ? "rgba(239,68,68,0.78)" : "rgba(34,211,238,0.78)"),
+              line: { color: "rgba(255,255,255,0.20)", width: 1 }
+            },
+            hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
+          }
+        ],
+        baseLayout("Utilidad atribuible 2020-2025", "MM$", 16),
+        commonConfig
+      );
+    }
+
+    if (document.getElementById("chart-roa-roe")) {
+      Plotly.newPlot(
+        "chart-roa-roe",
+        [
+          {
+            x: years,
+            y: itauRows.map(row => row.roa),
+            type: "scatter",
+            mode: "lines+markers",
+            name: "ROA",
+            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
+            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
+            hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
+          },
+          {
+            x: years,
+            y: itauRows.map(row => row.roe),
+            type: "scatter",
+            mode: "lines+markers",
+            name: "ROE",
+            line: { width: 3, color: "#8b5cf6", shape: "spline", smoothing: 0.35 },
+            marker: { size: 7, color: "#c084fc", line: { width: 1, color: "#f8fafc" } },
+            hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
+          }
+        ],
+        baseLayout("ROA y ROE 2020-2025", "%", 16),
+        commonConfig
+      );
+    }
+
+    if (document.getElementById("chart-eficiencia")) {
+      Plotly.newPlot(
+        "chart-eficiencia",
+        [
+          {
+            x: years,
+            y: itauRows.map(row => row.eficiencia),
+            type: "scatter",
+            mode: "lines+markers",
+            name: "Eficiencia operacional",
+            line: { width: 3, color: "#22d3ee", shape: "spline", smoothing: 0.35 },
+            marker: { size: 7, color: "#60a5fa", line: { width: 1, color: "#f8fafc" } },
+            fill: "tozeroy",
+            fillcolor: "rgba(34, 211, 238, 0.10)",
+            hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
+          }
+        ],
+        baseLayout("Eficiencia operacional 2020-2025", "%", 16),
+        commonConfig
+      );
+    }
+  }
+
   const select = document.getElementById("metric-select");
 
-  select.addEventListener("change", function () {
-    renderChart(this.value);
-  });
-
-  renderChart("creditos");
-  <script>
-  function baseMiniLayout(title, yTitle) {
-    return {
-      title: {
-        text: title,
-        font: {
-          color: "#f8fafc",
-          size: 16
-        },
-        x: 0.02,
-        xanchor: "left"
-      },
-      paper_bgcolor: "rgba(0,0,0,0)",
-      plot_bgcolor: "rgba(5, 15, 30, 0.28)",
-      font: {
-        color: "#cbd5e1",
-        family: "Arial, Helvetica, sans-serif"
-      },
-      margin: {
-        l: 58,
-        r: 20,
-        t: 55,
-        b: 48
-      },
-      xaxis: {
-        title: "Año",
-        type: "category",
-        gridcolor: "rgba(255,255,255,0.08)",
-        zerolinecolor: "rgba(255,255,255,0.10)",
-        tickfont: { color: "#cbd5e1", size: 11 },
-        titlefont: { color: "#cbd5e1", size: 12 }
-      },
-      yaxis: {
-        title: yTitle,
-        rangemode: "tozero",
-        gridcolor: "rgba(255,255,255,0.08)",
-        zerolinecolor: "rgba(255,255,255,0.10)",
-        tickfont: { color: "#cbd5e1", size: 11 },
-        titlefont: { color: "#cbd5e1", size: 12 }
-      },
-      hovermode: "x unified",
-      hoverlabel: {
-        bgcolor: "rgba(15, 23, 42, 0.92)",
-        bordercolor: "rgba(34, 211, 238, 0.35)",
-        font: {
-          color: "#f8fafc"
-        }
-      },
-      legend: {
-        orientation: "h",
-        yanchor: "bottom",
-        y: 1.02,
-        xanchor: "left",
-        x: 0,
-        font: {
-          color: "#cbd5e1",
-          size: 11
-        }
-      }
-    };
+  if (select) {
+    select.addEventListener("change", function () {
+      renderMainChart(this.value);
+    });
   }
 
-  const miniConfig = {
-    responsive: true,
-    displaylogo: false,
-    modeBarButtonsToRemove: [
-      "select2d",
-      "lasso2d",
-      "autoScale2d"
-    ]
-  };
-
-  function renderComplementaryCharts() {
-    Plotly.newPlot(
-      "chart-activos-creditos",
-      [
-        {
-          x: years,
-          y: itauRows.map(row => row.activos),
-          type: "scatter",
-          mode: "lines+markers",
-          name: "Total activos",
-          line: {
-            width: 3,
-            color: "#22d3ee",
-            shape: "spline",
-            smoothing: 0.4
-          },
-          marker: {
-            size: 7,
-            color: "#60a5fa",
-            line: {
-              width: 1,
-              color: "#e8eef8"
-            }
-          },
-          hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
-        },
-        {
-          x: years,
-          y: itauRows.map(row => row.creditos),
-          type: "scatter",
-          mode: "lines+markers",
-          name: "Créditos a clientes",
-          line: {
-            width: 3,
-            color: "#8b5cf6",
-            shape: "spline",
-            smoothing: 0.4
-          },
-          marker: {
-            size: 7,
-            color: "#c084fc",
-            line: {
-              width: 1,
-              color: "#f8fafc"
-            }
-          },
-          hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
-        }
-      ],
-      baseMiniLayout("Activos y créditos 2020-2025", "MM$"),
-      miniConfig
-    );
-
-    Plotly.newPlot(
-      "chart-utilidad",
-      [
-        {
-          x: years,
-          y: itauRows.map(row => row.utilidad),
-          type: "bar",
-          name: "Utilidad atribuible",
-          marker: {
-            color: itauRows.map(row => row.utilidad < 0 ? "rgba(239,68,68,0.75)" : "rgba(34,211,238,0.75)"),
-            line: {
-              color: "rgba(255,255,255,0.20)",
-              width: 1
-            }
-          },
-          hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
-        }
-      ],
-      baseMiniLayout("Utilidad atribuible 2020-2025", "MM$"),
-      miniConfig
-    );
-
-    Plotly.newPlot(
-      "chart-roa-roe",
-      [
-        {
-          x: years,
-          y: itauRows.map(row => row.roa),
-          type: "scatter",
-          mode: "lines+markers",
-          name: "ROA",
-          line: {
-            width: 3,
-            color: "#22d3ee",
-            shape: "spline",
-            smoothing: 0.35
-          },
-          marker: {
-            size: 7,
-            color: "#60a5fa",
-            line: {
-              width: 1,
-              color: "#f8fafc"
-            }
-          },
-          hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
-        },
-        {
-          x: years,
-          y: itauRows.map(row => row.roe),
-          type: "scatter",
-          mode: "lines+markers",
-          name: "ROE",
-          line: {
-            width: 3,
-            color: "#8b5cf6",
-            shape: "spline",
-            smoothing: 0.35
-          },
-          marker: {
-            size: 7,
-            color: "#c084fc",
-            line: {
-              width: 1,
-              color: "#f8fafc"
-            }
-          },
-          hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
-        }
-      ],
-      baseMiniLayout("ROA y ROE 2020-2025", "%"),
-      miniConfig
-    );
-
-    Plotly.newPlot(
-      "chart-eficiencia",
-      [
-        {
-          x: years,
-          y: itauRows.map(row => row.eficiencia),
-          type: "scatter",
-          mode: "lines+markers",
-          name: "Eficiencia operacional",
-          line: {
-            width: 3,
-            color: "#22d3ee",
-            shape: "spline",
-            smoothing: 0.35
-          },
-          marker: {
-            size: 7,
-            color: "#60a5fa",
-            line: {
-              width: 1,
-              color: "#f8fafc"
-            }
-          },
-          fill: "tozeroy",
-          fillcolor: "rgba(34, 211, 238, 0.10)",
-          hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
-        }
-      ],
-      baseMiniLayout("Eficiencia operacional 2020-2025", "%"),
-      miniConfig
-    );
-  }
-
+  renderMainChart("creditos");
   renderComplementaryCharts();
-</script>
 </script>
 </body>
 </html>
