@@ -1,6 +1,13 @@
 - [Análisis financiero de Banco Itaú Chile 2025](estudios/2026-analisis-financiero-banco-itau-chile.md)
 - Prueba-1
 
+
+## Bases de datos
+
+- [Base financiera Itaú Chile 2020-2025](datos/itau_chile_2020_2025_financieros.csv)
+- [Indicadores Itaú Chile 2020-2025](datos/itau_chile_2020_2025_indicadores.csv)
+- [Precios históricos Yahoo Finance Itaú Chile](datos/itau_chile_2020_2025_precios_yahoo.csv)
+
 Repositorio de práctica para aprender GitHub y documentar estudios, ensayos y análisis profesionales.
 
 Objetivo del repositorio
