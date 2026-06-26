@@ -243,26 +243,51 @@
   <div class="section-head">
     <h2>Gráficos complementarios</h2>
   </div>
-  <div class="section-body image-grid">
-    <figure class="chart-card">
-      <img src="../graficos/itau_activos_creditos_2020_2025.png" alt="Evolución de activos y créditos">
-      <figcaption>Evolución de activos y créditos</figcaption>
-    </figure>
-    <figure class="chart-card">
-      <img src="../graficos/itau_utilidad_atribuible_2020_2025.png" alt="Utilidad atribuible">
-      <figcaption>Utilidad atribuible a propietarios</figcaption>
-    </figure>
-    <figure class="chart-card">
-      <img src="../graficos/itau_roa_roe_2021_2025.png" alt="ROA y ROE">
-      <figcaption>ROA y ROE</figcaption>
-    </figure>
-    <figure class="chart-card">
-      <img src="../graficos/itau_eficiencia_operacional_2021_2025.png" alt="Eficiencia operacional">
-      <figcaption>Eficiencia operacional</figcaption>
-    </figure>
+
+  <div class="section-body">
+    <div class="dynamic-grid-2">
+      <article class="mini-dynamic-card liquid-glass-panel">
+        <div class="mini-card-head">
+          <h3>Evolución de activos y créditos</h3>
+          <span class="chart-pill">Interactivo</span>
+        </div>
+        <div class="mini-chart-wrap">
+          <div id="chart-activos-creditos"></div>
+        </div>
+      </article>
+
+      <article class="mini-dynamic-card liquid-glass-panel">
+        <div class="mini-card-head">
+          <h3>Utilidad atribuible a propietarios</h3>
+          <span class="chart-pill">Interactivo</span>
+        </div>
+        <div class="mini-chart-wrap">
+          <div id="chart-utilidad"></div>
+        </div>
+      </article>
+
+      <article class="mini-dynamic-card liquid-glass-panel">
+        <div class="mini-card-head">
+          <h3>ROA y ROE</h3>
+          <span class="chart-pill">Interactivo</span>
+        </div>
+        <div class="mini-chart-wrap">
+          <div id="chart-roa-roe"></div>
+        </div>
+      </article>
+
+      <article class="mini-dynamic-card liquid-glass-panel">
+        <div class="mini-card-head">
+          <h3>Eficiencia operacional</h3>
+          <span class="chart-pill">Interactivo</span>
+        </div>
+        <div class="mini-chart-wrap">
+          <div id="chart-eficiencia"></div>
+        </div>
+      </article>
+    </div>
   </div>
-</section>
-      </div>
+</section>      </div>
       <div class="section-body image-grid">
         <figure class="chart-card">
           <img src="../graficos/itau_activos_creditos_2020_2025.png" alt="Evolución de activos y créditos">
@@ -501,6 +526,240 @@
   });
 
   renderChart("creditos");
+  <script>
+  function baseMiniLayout(title, yTitle) {
+    return {
+      title: {
+        text: title,
+        font: {
+          color: "#f8fafc",
+          size: 16
+        },
+        x: 0.02,
+        xanchor: "left"
+      },
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(5, 15, 30, 0.28)",
+      font: {
+        color: "#cbd5e1",
+        family: "Arial, Helvetica, sans-serif"
+      },
+      margin: {
+        l: 58,
+        r: 20,
+        t: 55,
+        b: 48
+      },
+      xaxis: {
+        title: "Año",
+        type: "category",
+        gridcolor: "rgba(255,255,255,0.08)",
+        zerolinecolor: "rgba(255,255,255,0.10)",
+        tickfont: { color: "#cbd5e1", size: 11 },
+        titlefont: { color: "#cbd5e1", size: 12 }
+      },
+      yaxis: {
+        title: yTitle,
+        rangemode: "tozero",
+        gridcolor: "rgba(255,255,255,0.08)",
+        zerolinecolor: "rgba(255,255,255,0.10)",
+        tickfont: { color: "#cbd5e1", size: 11 },
+        titlefont: { color: "#cbd5e1", size: 12 }
+      },
+      hovermode: "x unified",
+      hoverlabel: {
+        bgcolor: "rgba(15, 23, 42, 0.92)",
+        bordercolor: "rgba(34, 211, 238, 0.35)",
+        font: {
+          color: "#f8fafc"
+        }
+      },
+      legend: {
+        orientation: "h",
+        yanchor: "bottom",
+        y: 1.02,
+        xanchor: "left",
+        x: 0,
+        font: {
+          color: "#cbd5e1",
+          size: 11
+        }
+      }
+    };
+  }
+
+  const miniConfig = {
+    responsive: true,
+    displaylogo: false,
+    modeBarButtonsToRemove: [
+      "select2d",
+      "lasso2d",
+      "autoScale2d"
+    ]
+  };
+
+  function renderComplementaryCharts() {
+    Plotly.newPlot(
+      "chart-activos-creditos",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.activos),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Total activos",
+          line: {
+            width: 3,
+            color: "#22d3ee",
+            shape: "spline",
+            smoothing: 0.4
+          },
+          marker: {
+            size: 7,
+            color: "#60a5fa",
+            line: {
+              width: 1,
+              color: "#e8eef8"
+            }
+          },
+          hovertemplate: "Año: %{x}<br>Total activos: %{y:,.0f} MM$<extra></extra>"
+        },
+        {
+          x: years,
+          y: itauRows.map(row => row.creditos),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Créditos a clientes",
+          line: {
+            width: 3,
+            color: "#8b5cf6",
+            shape: "spline",
+            smoothing: 0.4
+          },
+          marker: {
+            size: 7,
+            color: "#c084fc",
+            line: {
+              width: 1,
+              color: "#f8fafc"
+            }
+          },
+          hovertemplate: "Año: %{x}<br>Créditos: %{y:,.0f} MM$<extra></extra>"
+        }
+      ],
+      baseMiniLayout("Activos y créditos 2020-2025", "MM$"),
+      miniConfig
+    );
+
+    Plotly.newPlot(
+      "chart-utilidad",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.utilidad),
+          type: "bar",
+          name: "Utilidad atribuible",
+          marker: {
+            color: itauRows.map(row => row.utilidad < 0 ? "rgba(239,68,68,0.75)" : "rgba(34,211,238,0.75)"),
+            line: {
+              color: "rgba(255,255,255,0.20)",
+              width: 1
+            }
+          },
+          hovertemplate: "Año: %{x}<br>Utilidad: %{y:,.0f} MM$<extra></extra>"
+        }
+      ],
+      baseMiniLayout("Utilidad atribuible 2020-2025", "MM$"),
+      miniConfig
+    );
+
+    Plotly.newPlot(
+      "chart-roa-roe",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.roa),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "ROA",
+          line: {
+            width: 3,
+            color: "#22d3ee",
+            shape: "spline",
+            smoothing: 0.35
+          },
+          marker: {
+            size: 7,
+            color: "#60a5fa",
+            line: {
+              width: 1,
+              color: "#f8fafc"
+            }
+          },
+          hovertemplate: "Año: %{x}<br>ROA: %{y:.2f}%<extra></extra>"
+        },
+        {
+          x: years,
+          y: itauRows.map(row => row.roe),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "ROE",
+          line: {
+            width: 3,
+            color: "#8b5cf6",
+            shape: "spline",
+            smoothing: 0.35
+          },
+          marker: {
+            size: 7,
+            color: "#c084fc",
+            line: {
+              width: 1,
+              color: "#f8fafc"
+            }
+          },
+          hovertemplate: "Año: %{x}<br>ROE: %{y:.2f}%<extra></extra>"
+        }
+      ],
+      baseMiniLayout("ROA y ROE 2020-2025", "%"),
+      miniConfig
+    );
+
+    Plotly.newPlot(
+      "chart-eficiencia",
+      [
+        {
+          x: years,
+          y: itauRows.map(row => row.eficiencia),
+          type: "scatter",
+          mode: "lines+markers",
+          name: "Eficiencia operacional",
+          line: {
+            width: 3,
+            color: "#22d3ee",
+            shape: "spline",
+            smoothing: 0.35
+          },
+          marker: {
+            size: 7,
+            color: "#60a5fa",
+            line: {
+              width: 1,
+              color: "#f8fafc"
+            }
+          },
+          fill: "tozeroy",
+          fillcolor: "rgba(34, 211, 238, 0.10)",
+          hovertemplate: "Año: %{x}<br>Eficiencia: %{y:.2f}%<extra></extra>"
+        }
+      ],
+      baseMiniLayout("Eficiencia operacional 2020-2025", "%"),
+      miniConfig
+    );
+  }
+
+  renderComplementaryCharts();
+</script>
 </script>
 </body>
 </html>
