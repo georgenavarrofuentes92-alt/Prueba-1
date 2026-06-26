@@ -209,9 +209,30 @@
       El selector permite cambiar entre activos, créditos, utilidad, ROA, ROE,
       eficiencia operacional y patrimonio sobre activos.
     </p>
-    <div class="dynamic-chart-panel">
-      <div id="itau-dynamic-chart"></div>
+
+    <div class="dynamic-chart-panel liquid-glass-panel">
+  <div class="chart-toolbar">
+    <div class="chart-toolbar-left">
+      <label for="metric-select" class="chart-label">Indicador</label>
+      <select id="metric-select" class="glass-select">
+        <option value="activos">Total activos</option>
+        <option value="creditos" selected>Créditos a clientes</option>
+        <option value="utilidad">Utilidad atribuible</option>
+        <option value="roa">ROA</option>
+        <option value="roe">ROE</option>
+        <option value="eficiencia">Eficiencia operacional</option>
+        <option value="patrimonio_activos">Patrimonio / activos</option>
+      </select>
     </div>
+
+    <div class="chart-toolbar-right">
+      <span id="chart-title-pill" class="chart-pill">Créditos a clientes</span>
+    </div>
+  </div>
+
+  <div id="itau-dynamic-chart"></div>
+</div>
+    
     <p class="chart-note">
       Cifras financieras expresadas en MM$ y ratios en porcentaje. Elaboración propia
       a partir de la base financiera histórica construida para el estudio.
@@ -290,7 +311,7 @@
     </footer>
 
   </main>
-  <script>
+ <script>
   const itauRows = [
     { anio: 2020, activos: 35638632, creditos: 21685269, utilidad: -925479, roa: null, roe: null, eficiencia: null, patrimonio_activos: 6.70 },
     { anio: 2021, activos: 37784282, creditos: 23955972, utilidad: 277806, roa: 0.76, roe: 9.93, eficiencia: 53.90, patrimonio_activos: 8.87 },
@@ -299,7 +320,9 @@
     { anio: 2024, activos: 42531714, creditos: 27055397, utilidad: 376627, roa: 0.89, roe: 9.78, eficiencia: 49.75, patrimonio_activos: 9.35 },
     { anio: 2025, activos: 43916278, creditos: 28119106, utilidad: 428092, roa: 0.99, roe: 10.34, eficiencia: 54.99, patrimonio_activos: 9.81 }
   ];
+
   const years = itauRows.map(row => String(row.anio));
+
   const metrics = {
     activos: {
       label: "Total activos",
@@ -346,13 +369,37 @@
     patrimonio_activos: {
       label: "Patrimonio / activos",
       y: itauRows.map(row => row.patrimonio_activos),
-      title: "Patrimonio total sobre activos 2020-2025",
+      title: "Patrimonio sobre activos 2020-2025",
       yaxis: "%",
       hover: "Año: %{x}<br>Patrimonio / activos: %{y:.2f}%<extra></extra>"
     }
   };
+
+  function axisConfig(unit) {
+    if (unit === "%") {
+      return {
+        title: unit,
+        rangemode: "tozero",
+        gridcolor: "rgba(255,255,255,0.08)",
+        zerolinecolor: "rgba(255,255,255,0.10)",
+        tickfont: { color: "#cbd5e1" },
+        titlefont: { color: "#cbd5e1" }
+      };
+    }
+
+    return {
+      title: unit,
+      rangemode: "tozero",
+      gridcolor: "rgba(255,255,255,0.08)",
+      zerolinecolor: "rgba(255,255,255,0.10)",
+      tickfont: { color: "#cbd5e1" },
+      titlefont: { color: "#cbd5e1" }
+    };
+  }
+
   function buildTrace(metricKey) {
     const metric = metrics[metricKey];
+
     return {
       x: years,
       y: metric.y,
@@ -361,110 +408,99 @@
       name: metric.label,
       line: {
         width: 3,
-        color: "#22d3ee"
+        color: "#22d3ee",
+        shape: "spline",
+        smoothing: 0.45
       },
       marker: {
-        size: 8,
+        size: 9,
         color: "#60a5fa",
         line: {
-          width: 1,
+          width: 1.5,
           color: "#e8eef8"
         }
       },
+      fill: "tozeroy",
+      fillcolor: "rgba(34, 211, 238, 0.10)",
       connectgaps: false,
       hovertemplate: metric.hover
     };
   }
-  const initialMetric = "activos";
-  const layout = {
-    title: {
-      text: metrics[initialMetric].title,
-      font: {
-        color: "#f8fafc",
-        size: 20
-      },
-      x: 0.02,
-      xanchor: "left"
-    },
-    paper_bgcolor: "rgba(0,0,0,0)",
-    plot_bgcolor: "rgba(8,18,32,0.72)",
-    font: {
-      color: "#a7b4c8",
-      family: "Arial, Helvetica, sans-serif"
-    },
-    margin: {
-      l: 70,
-      r: 35,
-      t: 95,
-      b: 60
-    },
-    xaxis: {
-      title: "Año",
-      type: "category",
-      gridcolor: "rgba(148,163,184,0.12)",
-      zerolinecolor: "rgba(148,163,184,0.18)"
-    },
-    yaxis: {
-      title: metrics[initialMetric].yaxis,
-      rangemode: "tozero",
-      gridcolor: "rgba(148,163,184,0.12)",
-      zerolinecolor: "rgba(148,163,184,0.18)"
-    },
-    hovermode: "x unified",
-    updatemenus: [
-      {
-        buttons: Object.keys(metrics).map(key => ({
-          label: metrics[key].label,
-          method: "update",
-          args: [
-            {
-              y: [metrics[key].y],
-              name: metrics[key].label,
-              hovertemplate: metrics[key].hover
-            },
-            {
-              title: {
-                text: metrics[key].title,
-                font: {
-                  color: "#f8fafc",
-                  size: 20
-                },
-                x: 0.02,
-                xanchor: "left"
-              },
-              yaxis: {
-                title: metrics[key].yaxis,
-                rangemode: "tozero",
-                gridcolor: "rgba(148,163,184,0.12)",
-                zerolinecolor: "rgba(148,163,184,0.18)"
-              }
-            }
-          ]
-        })),
-        direction: "down",
-        showactive: true,
-        x: 0,
-        xanchor: "left",
-        y: 1.22,
-        yanchor: "top",
-        bgcolor: "#0f1b2d",
-        bordercolor: "rgba(148,163,184,0.28)",
+
+  function renderChart(metricKey) {
+    const metric = metrics[metricKey];
+
+    const layout = {
+      title: {
+        text: metric.title,
         font: {
-          color: "#e8eef8"
+          color: "#f8fafc",
+          size: 21
+        },
+        x: 0.02,
+        xanchor: "left"
+      },
+      paper_bgcolor: "rgba(0,0,0,0)",
+      plot_bgcolor: "rgba(5, 15, 30, 0.32)",
+      font: {
+        color: "#cbd5e1",
+        family: "Arial, Helvetica, sans-serif"
+      },
+      margin: {
+        l: 72,
+        r: 32,
+        t: 70,
+        b: 60
+      },
+      xaxis: {
+        title: "Año",
+        type: "category",
+        gridcolor: "rgba(255,255,255,0.08)",
+        zerolinecolor: "rgba(255,255,255,0.10)",
+        tickfont: { color: "#cbd5e1" },
+        titlefont: { color: "#cbd5e1" }
+      },
+      yaxis: axisConfig(metric.yaxis),
+      hovermode: "x unified",
+      hoverlabel: {
+        bgcolor: "rgba(15, 23, 42, 0.92)",
+        bordercolor: "rgba(34, 211, 238, 0.35)",
+        font: {
+          color: "#f8fafc"
         }
       }
-    ]
-  };
-  const config = {
-    responsive: true,
-    displaylogo: false
-  };
-  Plotly.newPlot(
-    "itau-dynamic-chart",
-    [buildTrace(initialMetric)],
-    layout,
-    config
-  );
+    };
+
+    const config = {
+      responsive: true,
+      displaylogo: false,
+      modeBarButtonsToRemove: [
+        "select2d",
+        "lasso2d",
+        "autoScale2d"
+      ]
+    };
+
+    Plotly.newPlot(
+      "itau-dynamic-chart",
+      [buildTrace(metricKey)],
+      layout,
+      config
+    );
+
+    const pill = document.getElementById("chart-title-pill");
+    if (pill) {
+      pill.textContent = metric.label;
+    }
+  }
+
+  const select = document.getElementById("metric-select");
+
+  select.addEventListener("change", function () {
+    renderChart(this.value);
+  });
+
+  renderChart("creditos");
 </script>
 </body>
 </html>
