@@ -2,7 +2,7 @@
 
 Este repositorio cuenta con una versión web publicada mediante GitHub Pages.
 
-- [Abrir sitio web](https://georgenavarrofuentes92-alt.github.io)/Prueba-1/)
+- [Abrir sitio web](https://georgenavarrofuentes92-alt.github.io/Prueba-1/)
 - [Ver gráfico dinámico](graficos/itau_chile_2020_2025_grafico_dinamico.html)
 
 
