@@ -1,4 +1,12 @@
-- [Análisis financiero de Banco Itaú Chile 2025](estudios/2026-analisis-financiero-banco-itau-chile.md)
+## Sitio web del estudio
+
+Este repositorio cuenta con una versión web publicada mediante GitHub Pages.
+
+- [Abrir sitio web](https://georgenavarrofuentes92-alt.github.io)/Prueba-1/)
+- [Ver gráfico dinámico](graficos/itau_chile_2020_2025_grafico_dinamico.html)
+
+
+- - [Análisis financiero de Banco Itaú Chile 2025](estudios/2026-analisis-financiero-banco-itau-chile.md)
 - Prueba-1
 
 
